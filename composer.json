@@ -1,0 +1,38 @@
+{
+    "name": "yurievyuri/dev.larabit",
+    "description": "Bitrix24 D7 Module for Larabit Connector",
+    "type": "bitrix-module",
+    "keywords": ["bitrix", "bitrix24", "plugin"],
+    "homepage": "https://github.com/yurievyuri/dev.larabit",
+    "require": {
+        "php": ">=7.4",
+        "composer/installers": "~2",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "9.5.9"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yuri Yuriev",
+            "email": "yurievyuri@live.com",
+            "homepage": "https://github.com/yurievyuri/",
+            "role": "Developer"
+        }
+    ],
+    "extra" : {
+        "installer-name" : "dev.larabit"
+    },
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Larabit\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Larabit\\Tests\\": "tests/"
+        }
+    }
+}
