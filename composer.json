@@ -1,5 +1,5 @@
 {
-    "name": "yurievyuri/dev.larabit",
+    "name": "yurievyuri/bitrix.larabit",
     "description": "Bitrix24 D7 Module for Larabit Connector",
     "type": "bitrix-module",
     "keywords": ["bitrix", "bitrix24", "plugin"],
