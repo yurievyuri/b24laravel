@@ -29,15 +29,19 @@ class dev_larabit extends CModule
         $this->PARTNER_NAME = Loc::getMessage('DEV_LARABIT_PARTNER_NAME');
         $this->PARTNER_URI = Loc::getMessage('DEV_LARABIT_PARTNER_URI');
 
-        xdebug_break();
-        $dir = __DIR__ . '../include.php';
-
         if ( !class_exists('\\Dev\\Larabit\\Option') ){
-            include __DIR__ . '../include.php';
+            require_once __DIR__ . './../include.php';
+            if ( is_countable($arClasses) )
+            {
+                foreach ($arClasses as $class => $path)
+                {
+                    if ( !$path ) continue;
+                    require __DIR__  . './../'.$path;
+                }
+            }
         }
 
         Loader::includeModule('rest');
-
     }
 
     public static function getModuleId(): string
