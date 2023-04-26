@@ -25,15 +25,5 @@
     "extra" : {
         "installer-name" : "dev.larabit"
     },
-    "minimum-stability": "stable",
-    /*"autoload": {
-        "psr-4": {
-            "Dev\\Larabit\\": "lib/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Dev\\Larabit\\Tests\\": "tests/"
-        }
-    }*/
+    "minimum-stability": "stable"
 }
