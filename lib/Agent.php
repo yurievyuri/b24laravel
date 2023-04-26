@@ -96,12 +96,11 @@ class Agent
     /**
      * @throws Exception
      */
-    public static function updateAgentDateNextExecDirect($id, $date): bool
+    private static function updateAgentDateNextExecDirect($id, $date): bool
     {
         global $DB;
         $date = (new \DateTime($date, new DateTimeZone()))->format('Y-m-d H:i:s');
         $strUpdate = "`NEXT_EXEC` = '" . $date . "'";
-        //\CDatabase::CharToDateFunction( $date ); <-- this is where the date can change depending on the zone
         $strSql = 'UPDATE b_agent SET ' . $strUpdate . ' WHERE ID=' . $id;
         $DB->Query($strSql, false, 'FILE: ' . __FILE__ . '<br> LINE: ' . __LINE__);
         $bdDate = self::getAgentDateNextExec($id);
