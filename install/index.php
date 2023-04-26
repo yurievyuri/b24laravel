@@ -74,8 +74,8 @@ class dev_larabit extends CModule
     private function inboundHookInstall()
     {
         $userId = 1;
-        $title = Loc::getMessage('DEV_LARABIT_MODULE_NAME');
-        $comment = Loc::getMessage('DEV_LARABIT_MODULE_DESCRIPTION');
+        $title = Loc::getMessage('DEV_LARABIT_INBOUND_HOOK_NAME');
+        $comment = Loc::getMessage('DEV_LARABIT_INBOUND_HOOK_DESCRIPTION');
         $password = \Bitrix\Main\Security\Random::getString(16);
         $arScope = \Dev\Larabit\Scope::get();
 
