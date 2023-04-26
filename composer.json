@@ -26,14 +26,14 @@
         "installer-name" : "dev.larabit"
     },
     "minimum-stability": "stable",
-    "autoload": {
+    /*"autoload": {
         "psr-4": {
-            "Larabit\\": "src/"
+            "Dev\\Larabit\\": "lib/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Larabit\\Tests\\": "tests/"
+            "Dev\\Larabit\\Tests\\": "tests/"
         }
-    }
+    }*/
 }

@@ -1,0 +1,33 @@
+<phpunit
+        bootstrap="bootstrap.php"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        forceCoversAnnotation="false"
+        cacheResult="false"
+        stopOnFailure="true"
+        stopOnError="true"
+        stopOnIncomplete="true"
+>
+    <testsuites>
+        <testsuite name="dev.larabit">
+            <directory suffix=".php">./tests</directory>
+        </testsuite>
+    </testsuites>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./tests</directory>
+        </include>
+        <report>
+            <html outputDirectory="./tests/coverage_reports" />
+        </report>
+    </coverage>
+    <php>
+        <includePath>.</includePath>
+        <const name="NOT_CHECK_PERMISSIONS" value="true"/>
+        <const name="NO_AGENT_CHECK" value="true"/>
+        <var name="DBType" value="mysql"/>
+        <server name="DOCUMENT_ROOT" value="/home/bitrix/www"/>
+    </php>
+</phpunit>
