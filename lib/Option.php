@@ -57,13 +57,4 @@ final class Option
     {
         return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_REGISTRATION_TOKEN);
     }
-
-    public static function register( HttpRequest $request ): void
-    {
-        $arValues = $request->getValues();
-        if ( empty($arValues) ) return;
-        if ( !isset($arValues['register']) || !in_array(strtolower($arValues['register']),['register', 'unregister'])) return;
-
-        Api\Auth::{strtolower($arValues['register'])}($arValues);
-    }
 }

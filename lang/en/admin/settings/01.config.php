@@ -1,5 +1,5 @@
 <?php
-$MESS['DEV_LARABIT_MAIN_TAB'] = 'Main';
+$MESS['DEV_LARABIT_MAIN_TAB'] = '✔️ Main';
 $MESS['DEV_LARABIT_MAIN_TITLE'] = 'Settings';
 $MESS['DEV_LARABIT_OPTIONS'] = 'Laravel Connector:';
 $MESS['DEV_LARABIT_ACTIVATE'] = 'Activate';

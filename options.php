@@ -158,9 +158,16 @@ foreach ($aTabs as $aTab) {
         }
     }
 }
+
+$arValues = $request->getValues();
+if ( isset($arValues['register']) && in_array(strtolower($arValues['register']),['register', 'unregister']) )
+{
+    $arData['register'] = \Dev\Larabit\Api\Auth::register($arValues['register']);
+}
+
 if ($arData) {
     \CEventLog::Add([
-            'SEVERITY' => \CEventLog::SEVERITY_INFO,
+            'SEVERITY' => \CEventLog::SEVERITY_NOTICE,
             'AUDIT_TYPE_ID' => 'SAVE_MODULE_OPTIONS',
             'ITEM_ID' => $module_id,
             'MODULE_ID' => $module_id,
@@ -172,7 +179,5 @@ if ($arData) {
         ]
     );
 }
-
-\Dev\Larabit\Option::register($request);
 
 LocalRedirect($APPLICATION->GetCurPage() . '?mid=' . $module_id . '&lang=' . LANG . '&clear_cache=Y');

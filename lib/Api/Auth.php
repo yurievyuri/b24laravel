@@ -8,10 +8,11 @@ class Auth extends \Dev\Larabit\Http
 {
     protected $path = '/api/auth';
 
-    public static function register()
+    public static function register(string $method)
     {
+        $method = strtolower($method);
         $res = (new self)
-            ->setMethod(__FUNCTION__)
+            ->setMethod($method)
             ->request([
                 'name' => Option::getExternalUserName(),
                 'email' => Option::getExternalUserEmail(),
@@ -20,18 +21,14 @@ class Auth extends \Dev\Larabit\Http
             ])
             ->getResponse();
 
-        if (isset($res['status']) && $res['status'] == true && !empty($res['token']))
-        {
+        if ( !isset($res['status']) || $res['status'] != true ) return $res;
+
+        if ($method === 'register' && !empty($res['token']) ) {
             Option::setExternalUserToken($res['token']);
         } else {
-            Option::setExternalUserToken();
+            Option::setExternalUserToken(false);
         }
 
         return $res;
-    }
-
-    public static function unregister()
-    {
-
     }
 }

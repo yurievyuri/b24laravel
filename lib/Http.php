@@ -7,7 +7,7 @@ class Http
     protected array $response = [];
     protected string $method;
 
-    protected function request(array $params = [], array $headers = [])
+    public function request(array $params = [], array $headers = [])
     {
         $ob = (new \Bitrix\Main\Web\HttpClient)
             ->waitResponse(true)

@@ -45,25 +45,4 @@ class OptionTest extends TestCase
     {
         $this->assertNotEmpty(Option::getExternalUserToken());
     }
-
-    public function testRegister()
-    {
-        $res = Option::register(        [
-            'mid' => 'dev.larabit',
-            'lang' => 'en',
-            'autosave_id' => '2093cacaacaa5a348ada5037fe0168be8',
-            'activate' => 'Y',
-            'external_domain' => '192.168.0.68',
-            'external_user_name' => 'larabit',
-            'external_user_email' => 'larabit@mail.ru',
-            'external_user_password' => 'rt11qw12',
-            'registration_token' => '2u82405vn032430987v5-2347v5165n1g1',
-            'http_protocol' => 'http',
-            'disable_ssl_verification' => 'Y',
-            'register' => 'register',
-            'sessid' => '71e03af836ea2ca3d445aaf3f8702eee',
-        ]);
-
-        $this->assertTrue(true);
-    }
 }
