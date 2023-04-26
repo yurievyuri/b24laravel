@@ -8,6 +8,8 @@ use Http\Client\HttpClient;
 final class Option
 {
     const MODULE_ID = 'dev.larabit';
+    const CONF_INBOUND_HOOK_ID = 'inbound_hook_id';
+    const CONF_INBOUND_HOOK_PASSWORD = 'inbound_hook_password';
     const CONF_ACTIVATE = 'activate';
     const CONF_EXTERNAL_DOMAIN = 'external_domain';
     const CONF_EXTERNAL_USER_NAME = 'external_user_name';
@@ -17,6 +19,7 @@ final class Option
     const CONF_EXTERNAL_USER_TOKEN = 'external_user_token';
     const CONF_DISABLE_SSL_VERIFICATION = 'disable_ssl_verification';
     const CONF_HTTP_PROTOCOL = 'http_protocol';
+
     public static function isActive():bool
     {
         return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_ACTIVATE) === 'Y';

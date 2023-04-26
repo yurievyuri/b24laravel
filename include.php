@@ -7,4 +7,5 @@
     "\\Dev\\Larabit\\Option" => "lib/Option.php",
     "\\Dev\\Larabit\\Api\\Auth" => "lib/Api/Auth.php",
     "\\Dev\\Larabit\\Api\\Laravel" => "lib/Api/Laravel.php",
+    "\\Dev\\Larabit\\Scope" => "lib/Scope.php",
 ]);
