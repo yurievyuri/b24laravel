@@ -2,6 +2,9 @@
 
 namespace Dev\Larabit;
 
+use Bitrix\Main\HttpRequest;
+use Http\Client\HttpClient;
+
 final class Option
 {
     const MODULE_ID = 'dev.larabit';
@@ -10,6 +13,7 @@ final class Option
     const CONF_EXTERNAL_USER_NAME = 'external_user_name';
     const CONF_EXTERNAL_USER_PASSWORD = 'external_user_password';
     const CONF_EXTERNAL_USER_EMAIL = 'external_user_email';
+    const CONF_REGISTRATION_TOKEN = 'registration_token';
     const CONF_EXTERNAL_USER_TOKEN = 'external_user_token';
     const CONF_DISABLE_SSL_VERIFICATION = 'disable_ssl_verification';
     const CONF_HTTP_PROTOCOL = 'http_protocol';
@@ -37,7 +41,7 @@ final class Option
     {
         return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_USER_TOKEN);
     }
-    public static function setExternalUserToken(string $value): void
+    public static function setExternalUserToken(string $value = ''): void
     {
         \Bitrix\Main\Config\Option::set(self::MODULE_ID, self::CONF_EXTERNAL_USER_TOKEN, $value);
     }
@@ -48,5 +52,18 @@ final class Option
     public static function getHttpProtocol(): string
     {
         return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_HTTP_PROTOCOL) ?: 'http';
+    }
+    public static function getRegistrationToken(): string
+    {
+        return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_REGISTRATION_TOKEN);
+    }
+
+    public static function register( HttpRequest $request ): void
+    {
+        $arValues = $request->getValues();
+        if ( empty($arValues) ) return;
+        if ( !isset($arValues['register']) || !in_array(strtolower($arValues['register']),['register', 'unregister'])) return;
+
+        Api\Auth::{strtolower($arValues['register'])}($arValues);
     }
 }

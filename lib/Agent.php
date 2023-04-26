@@ -10,7 +10,7 @@ use Bitrix\Main\UserTable;
 
 class Agent
 {
-    private const AGENT_MAX_LIMIT_DAYS = 15;
+    private const AGENT_MAX_LIMIT_DAYS = 30;
 
     /**
      * Update agents with removal

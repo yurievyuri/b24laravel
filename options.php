@@ -120,6 +120,8 @@ $tabControl->Begin();
         $tabControl->Buttons();
         ?>
         <input type="submit" name="apply" value="<?= Loc::getMessage("MAIN_SAVE") ?>" class="adm-btn-save"/>
+        <?php $registerValue = \Dev\Larabit\Option::getExternalUserToken() ? 'Unregister' : 'Register'; ?>
+            <input type="submit" name="register" value="<?php echo $registerValue?>"/>
         <?php echo(bitrix_sessid_post()); ?>
     </form>
 
@@ -128,7 +130,6 @@ global $USER;
 $arData = [];
 $tabControl->End();
 if (!$request->isPost() || !check_bitrix_sessid()) return false;
-$ar = $request->getValues();
 foreach ($aTabs as $aTab) {
     foreach ($aTab['OPTIONS'] as $configName => $arOption) {
         if (!is_array($arOption)) {
@@ -161,8 +162,8 @@ if ($arData) {
     \CEventLog::Add([
             'SEVERITY' => \CEventLog::SEVERITY_INFO,
             'AUDIT_TYPE_ID' => 'SAVE_MODULE_OPTIONS',
-            'ITEM_ID' => 'dev.tools',
-            'MODULE_ID' => 'dev.tools',
+            'ITEM_ID' => $module_id,
+            'MODULE_ID' => $module_id,
             'USER_ID' => $USER->GetID(),
             'REQUEST_URL' => $request->getDecodedUri(),
             'USER_AGENT' => $request->getUserAgent(),
@@ -171,4 +172,7 @@ if ($arData) {
         ]
     );
 }
+
+\Dev\Larabit\Option::register($request);
+
 LocalRedirect($APPLICATION->GetCurPage() . '?mid=' . $module_id . '&lang=' . LANG . '&clear_cache=Y');
