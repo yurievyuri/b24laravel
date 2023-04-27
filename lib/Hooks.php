@@ -11,8 +11,11 @@ use \Bitrix\Main\Localization\Loc;
 
 class Hooks
 {
-    public static function install(): bool
+    public static function install(): int
     {
+        $existPasswordId = self::getExist();
+        if ( $existPasswordId > 0 ) return $existPasswordId;
+
         $title = Loc::getMessage('DEV_LARABIT_INBOUND_HOOK_NAME');
         $comment = Loc::getMessage('DEV_LARABIT_INBOUND_HOOK_DESCRIPTION');
         $password = \Bitrix\Main\Security\Random::getString(16);
@@ -75,15 +78,19 @@ class Hooks
         \Bitrix\Main\Config\Option::set(\Dev\Larabit\Option::CONF_MODULE_ID, \Dev\Larabit\Option::CONF_INBOUND_HOOK_ID, $passwordId);
         \Bitrix\Main\Config\Option::set(\Dev\Larabit\Option::CONF_MODULE_ID, \Dev\Larabit\Option::CONF_INBOUND_HOOK_PASSWORD, $password);
 
-        return true;
+        return $passwordId;
     }
 
     public static function uninstall(): bool
     {
-        $passwordId = (int) \Bitrix\Main\Config\Option::get(\Dev\Larabit\Option::CONF_MODULE_ID, \Dev\Larabit\Option::CONF_INBOUND_HOOK_ID);
-        if ( !$passwordId ) return false;
+        $passwordId = self::getExist();
+        if ( $passwordId == 0 ) return false;
 
-        PasswordTable::delete($passwordId);
+        if ( PasswordTable::delete($passwordId)->isSuccess() )
+        {
+            \Bitrix\Main\Config\Option::set(\Dev\Larabit\Option::CONF_MODULE_ID, \Dev\Larabit\Option::CONF_INBOUND_HOOK_ID, '');
+            \Bitrix\Main\Config\Option::set(\Dev\Larabit\Option::CONF_MODULE_ID, \Dev\Larabit\Option::CONF_INBOUND_HOOK_PASSWORD, '');
+        }
 
         $db = PermissionTable::getList(['filter' => ['=PASSWORD_ID' => $passwordId], 'select' => ['ID']]);
         while( $list = $db->fetch() )
@@ -93,6 +100,18 @@ class Hooks
 
         $integrId = (int) IntegrationTable::getList(['filter' => ['=PASSWORD_ID' => $passwordId], 'select' => ['ID']])->fetch()['ID'];
         if ( !$integrId ) return false;
+
         return IntegrationTable::delete($integrId)->isSuccess();
+    }
+
+    public static function getExist():? int
+    {
+        $passwordId = self::getInboundHookPassword();
+        return is_numeric($passwordId) && PasswordTable::getCount(['ID' => $passwordId]) > 0 ? $passwordId : 0;
+    }
+
+    public static function getInboundHookPassword():? int
+    {
+        return (int) \Bitrix\Main\Config\Option::get(\Dev\Larabit\Option::CONF_MODULE_ID, \Dev\Larabit\Option::CONF_INBOUND_HOOK_ID);
     }
 }
