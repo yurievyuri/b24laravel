@@ -8,5 +8,6 @@ $arClasses = [
     "\\Dev\\Larabit\\Api\\Auth" => "lib/Api/Auth.php",
     "\\Dev\\Larabit\\Api\\Laravel" => "lib/Api/Laravel.php",
     "\\Dev\\Larabit\\Scope" => "lib/Scope.php",
+    "\\Dev\\Larabit\\Hooks" => "lib/Hooks.php",
 ];
-\Bitrix\Main\Loader::registerAutoLoadClasses('dev.larabit', $arClasses);
+\Bitrix\Main\Loader::registerAutoLoadClasses(basename(__DIR__), $arClasses);

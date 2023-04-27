@@ -7,7 +7,7 @@
             'sort'          => 5,
             'text'          => 'Larabit Connector',
             'title'         => 'Module Connector',
-            'url'           => 'settings.php?lang=ru&mid=dev.larabit&lang=' . LANGUAGE_ID,
+            'url'           => 'settings.php?lang=ru&mid='.\Dev\Larabit\Option::getModuleId().'&lang=' . LANGUAGE_ID,
             'icon'          => 'fileman_sticker_icon'
             //'items_id'      => 'dev.tools',
             /*'items'         => array(

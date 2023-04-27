@@ -8,6 +8,8 @@ use Http\Client\HttpClient;
 final class Option
 {
     const MODULE_ID = 'dev.larabit';
+    const CONF_MODULE_ID = self::MODULE_ID;
+    const CONF_USER_ID = 1;
     const CONF_INBOUND_HOOK_ID = 'inbound_hook_id';
     const CONF_INBOUND_HOOK_PASSWORD = 'inbound_hook_password';
     const CONF_ACTIVATE = 'activate';
@@ -60,4 +62,18 @@ final class Option
     {
         return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_REGISTRATION_TOKEN);
     }
+
+    public static function getModuleId(): string
+    {
+        return self::MODULE_ID;
+    }
+    public static function getVersion(): string
+    {
+        return '1.0.0';
+    }
+    public static function getDateRealease(): string
+    {
+        return '2023-04-27';
+    }
+
 }

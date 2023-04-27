@@ -1,57 +1,37 @@
 <?php
 
 use Bitrix\Main\EventManager;
-use Bitrix\Rest\APAuth\PasswordTable;
-use Bitrix\Rest\APAuth\PermissionTable;
-use Bitrix\Rest\Preset\IntegrationTable;
 use Dev\Larabit\Handlers;
 use Bitrix\Main\Application;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ModuleManager;
 
-Loc::loadMessages(__FILE__);
+\Bitrix\Main\Localization\Loc::loadMessages(__FILE__);
 
 class dev_larabit extends CModule
 {
-    private const CONF_INBOUND_HOOK_ID = 'inbound_hook_id';
-    private const CONF_INBOUND_HOOK_PASSWORD = 'inbound_hook_password';
+    private static $mainClass = '\\Dev\\Larabit\\Option';
     private static $handlerMethod = 'moduleOnProlog';
 
     public function __construct()
     {
-        $this->MODULE_VERSION = '1.0.0';
-        $this->MODULE_VERSION_DATE = '25.04.2023';
-        $this->MODULE_ID = self::getModuleId();
+        $this->getModuleClasses();
+
+        $this->MODULE_VERSION = \Dev\Larabit\Option::getVersion();
+        $this->MODULE_VERSION_DATE = \Dev\Larabit\Option::getDateRealease();
+        $this->MODULE_ID = \Dev\Larabit\Option::getModuleId();
         $this->MODULE_NAME = Loc::getMessage('DEV_LARABIT_MODULE_NAME');
         $this->MODULE_DESCRIPTION = Loc::getMessage('DEV_LARABIT_MODULE_DESCRIPTION');
         $this->MODULE_GROUP_RIGHTS = 'N';
         $this->PARTNER_NAME = Loc::getMessage('DEV_LARABIT_PARTNER_NAME');
         $this->PARTNER_URI = Loc::getMessage('DEV_LARABIT_PARTNER_URI');
-
-        if ( !class_exists('\\Dev\\Larabit\\Option') ){
-            require_once __DIR__ . './../include.php';
-            if ( is_countable($arClasses) )
-            {
-                foreach ($arClasses as $class => $path)
-                {
-                    if ( !$path ) continue;
-                    require __DIR__  . './../'.$path;
-                }
-            }
-        }
-
         Loader::includeModule('rest');
-    }
-
-    public static function getModuleId(): string
-    {
-        return str_ireplace('_', '.', __CLASS__);
     }
 
     public function doInstall(): ?bool
     {
-        $this->inboundHookInstall();
+        \Dev\Larabit\Hooks::install();
         ModuleManager::registerModule($this->MODULE_ID);
         $event = EventManager::getInstance();
         if (is_object($event)) {
@@ -62,7 +42,7 @@ class dev_larabit extends CModule
 
     public function doUninstall(): bool
     {
-        $this->inboundHookUninstall();
+        \Dev\Larabit\Hooks::uninstall();
         $event = EventManager::getInstance();
         if (is_object($event)) {
             $event->unRegisterEventHandler('main', self::$handlerMethod, $this->MODULE_ID);
@@ -71,89 +51,14 @@ class dev_larabit extends CModule
         return true;
     }
 
-    private function inboundHookInstall()
+    private function getModuleClasses(): void
     {
-        $userId = 1;
-        $title = Loc::getMessage('DEV_LARABIT_INBOUND_HOOK_NAME');
-        $comment = Loc::getMessage('DEV_LARABIT_INBOUND_HOOK_DESCRIPTION');
-        $password = \Bitrix\Main\Security\Random::getString(16);
-        $arScope = \Dev\Larabit\Scope::get();
-
-        $res = PasswordTable::add([
-            'USER_ID' => $userId,
-            'PASSWORD' => $password,
-            'ACTIVE' => 'Y',
-            'TITLE' => $title,
-            'COMMENT' => $comment,
-            'DATE_CREATE' => new \Bitrix\Main\Type\DateTime(),
-            //'DATE_LOGIN' => new \Bitrix\Main\Type\DateTime(),
-            //'LAST_IP' => ''
-        ]);
-
-        if (!$res->isSuccess()) {
-            throw new \Exception(implode(', ', $res->getErrorMessages()));
+        if ( class_exists(self::$mainClass) ) return;
+        require_once __DIR__ . './../include.php';
+        if ( !is_countable($arClasses) ) return;
+        foreach ($arClasses as $class => $path) {
+            if ( !$path ) continue;
+            require __DIR__  . './../'.$path;
         }
-
-        $passwordId = $res->getId();
-
-        // make arscope array with data
-        foreach ($arScope as $item) {
-            $arScopeNew[] = array(
-                'PASSWORD_ID' => $passwordId,
-                'PERM' => $item
-            );
-        }
-        if ($arScopeNew) {
-            $res = PermissionTable::addMulti($arScopeNew)->isSuccess();
-        }
-
-        $res = IntegrationTable::update(
-            (int) IntegrationTable::getList(['filter' => ['=PASSWORD_ID' => $passwordId], 'select' => ['ID']])->fetch()['ID'],
-            [
-                'USER_ID' => $userId,
-                'ELEMENT_CODE' => \Bitrix\Rest\Preset\Data\Element::DEFAULT_IN_WEBHOOK,
-                'TITLE' => $title,
-                //'PASSWORD_ID' => $passwordId,
-                //'APP_ID' => null,
-                'SCOPE' => $arScope,
-                //'QUERY' => [],
-                //'OUTGOING_EVENTS' => ,
-                'OUTGOING_NEEDED' => 'N',
-                //'OUTGOING_HANDLER_URL',
-                'WIDGET_NEEDED' => 'N',
-                //'WIDGET_HANDLER_URL',
-                //'WIDGET_LIST',
-                'APPLICATION_TOKEN' => \Bitrix\Main\Security\Random::getString(32),
-                'APPLICATION_NEEDED' => 'N',
-                'APPLICATION_ONLY_API' => 'N',
-                //'BOT_ID',
-                //'BOT_HANDLER_URL'
-            ]);
-
-        if (!$res->isSuccess()) {
-            throw new \Exception(implode(', ', $res->getErrorMessages()));
-        }
-
-        \Bitrix\Main\Config\Option::set($this->MODULE_ID, \Dev\Larabit\Option::CONF_INBOUND_HOOK_ID, $passwordId);
-        \Bitrix\Main\Config\Option::set($this->MODULE_ID, \Dev\Larabit\Option::CONF_INBOUND_HOOK_PASSWORD, $password);
     }
-
-    public function inboundHookUninstall()
-    {
-        $passwordId = (int) \Bitrix\Main\Config\Option::get($this->MODULE_ID, \Dev\Larabit\Option::CONF_INBOUND_HOOK_ID);
-        if ( !$passwordId ) return;
-
-        PasswordTable::delete($passwordId);
-
-        $db = PermissionTable::getList(['filter' => ['=PASSWORD_ID' => $passwordId], 'select' => ['ID']]);
-        while( $list = $db->fetch() )
-        {
-            PermissionTable::add($list['ID']);
-        }
-
-        $integrId = (int) IntegrationTable::getList(['filter' => ['=PASSWORD_ID' => $passwordId], 'select' => ['ID']])->fetch()['ID'];
-        if ( !$integrId ) return;
-        IntegrationTable::delete($integrId);
-    }
-
 }

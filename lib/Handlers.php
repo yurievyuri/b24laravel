@@ -6,6 +6,6 @@ class Handlers
 {
     public static function moduleOnProlog()
     {
-        Loader::includeModule('dev.larabit');
+        Loader::includeModule(\Dev\Larabit\Option::getModuleId());
     }
 }

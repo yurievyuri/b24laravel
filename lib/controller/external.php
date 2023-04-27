@@ -6,7 +6,7 @@ class External extends \Bitrix\Main\Engine\Controller
     {
         return [
             \CRestUtil::GLOBAL_SCOPE => [
-                'dev.larabit.custom' => [
+                \Dev\Larabit\Option::getModuleId() . '.custom' => [
                     'callback' => [self::class, 'custom'],
                     'params' => []
                 ],
