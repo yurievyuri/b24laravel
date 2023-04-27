@@ -23,9 +23,9 @@ class Auth extends \Dev\Larabit\Http
             ])
             ->getResponse();
 
-        if ( !isset($res['status']) || $res['status'] != true ) return $res;
+        if (!isset($res['status']) || $res['status'] != true) return $res;
 
-        if ($method === 'register' && !empty($res['token']) ) {
+        if ($method === 'register' && !empty($res['token'])) {
             Option::setExternalUserToken($res['token']);
         } else {
             Option::setExternalUserToken(false);
