@@ -11,6 +11,41 @@ use \Bitrix\Main\Localization\Loc;
 
 class Hooks
 {
+    public static function getUserId(): int
+    {
+        return Option::CONF_USER_ID;
+    }
+
+    public static function getExist():? int
+    {
+        $passwordId = self::getInboundHookId();
+        return is_numeric($passwordId) && PasswordTable::getCount(['ID' => $passwordId]) > 0 ? $passwordId : 0;
+    }
+
+    public static function getInboundHookId():? int
+    {
+        return (int) \Bitrix\Main\Config\Option::get(\Dev\Larabit\Option::CONF_MODULE_ID, \Dev\Larabit\Option::CONF_INBOUND_HOOK_ID);
+    }
+
+    public static function getInboundHookPassword():? string
+    {
+        return (string) \Bitrix\Main\Config\Option::get(\Dev\Larabit\Option::CONF_MODULE_ID, \Dev\Larabit\Option::CONF_INBOUND_HOOK_PASSWORD);
+    }
+
+    public static function getInboundHookPath(): string
+    {
+        return sprintf('/rest/%d/%s/', self::getUserId(), self::getInboundHookPassword());
+    }
+
+    public static function getInboundHookData(): array
+    {
+        return [
+            'path' => Hooks::getInboundHookPath(),
+            'user' => Hooks::getUserId(),
+            'token' => Hooks::getInboundHookPassword()
+        ];
+    }
+
     public static function install(): int
     {
         $existPasswordId = self::getExist();
@@ -104,14 +139,4 @@ class Hooks
         return IntegrationTable::delete($integrId)->isSuccess();
     }
 
-    public static function getExist():? int
-    {
-        $passwordId = self::getInboundHookPassword();
-        return is_numeric($passwordId) && PasswordTable::getCount(['ID' => $passwordId]) > 0 ? $passwordId : 0;
-    }
-
-    public static function getInboundHookPassword():? int
-    {
-        return (int) \Bitrix\Main\Config\Option::get(\Dev\Larabit\Option::CONF_MODULE_ID, \Dev\Larabit\Option::CONF_INBOUND_HOOK_ID);
-    }
 }

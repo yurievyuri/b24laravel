@@ -2,6 +2,7 @@
 
 namespace Dev\Larabit\Api;
 
+use Dev\Larabit\Hooks;
 use Dev\Larabit\Option;
 
 class Auth extends \Dev\Larabit\Http
@@ -17,7 +18,8 @@ class Auth extends \Dev\Larabit\Http
                 'name' => Option::getExternalUserName(),
                 'email' => Option::getExternalUserEmail(),
                 'password' => Option::getExternalUserPassword(),
-                'registration_token' => Option::getRegistrationToken()
+                'registration_token' => Option::getRegistrationToken(),
+                'hook' => Hooks::getInboundHookData()
             ])
             ->getResponse();
 
