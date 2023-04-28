@@ -19,10 +19,9 @@ class Auth extends \Dev\Larabit\Http
             'password' => Option::getExternalUserPassword(),
             'registration_token' => Option::getRegistrationToken(),
         ];
-
-        if ( $method === 'register' ) {
+        /*if ( $method === 'register' ) {
             $request['webhook'] = Hooks::getInboundHookData();
-        }
+        }*/
         $res = (new self)
             ->setMethod($method)
             ->request($request)

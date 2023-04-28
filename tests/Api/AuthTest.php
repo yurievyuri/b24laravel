@@ -34,7 +34,7 @@ class AuthTest extends TestCase
         return (new Auth)
             ->setMethod($method)
             ->request($this->getParams())
-            ->getResponse();
+            ->getData();
     }
 
     private function getParams()

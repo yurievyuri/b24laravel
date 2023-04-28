@@ -42,4 +42,8 @@ class Http
     {
         return $this->response ?: [];
     }
+    public function getData()
+    {
+        return $this->getResponse()['data'] ?? [];
+    }
 }
