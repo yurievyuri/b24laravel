@@ -12,15 +12,21 @@ class Auth extends \Dev\Larabit\Http
     public static function register(string $method)
     {
         $method = strtolower($method);
+        $request = [
+            'name' => Option::getExternalUserName(),
+            'email' => Option::getExternalUserEmail(),
+            'password' => Option::getExternalUserPassword(),
+            'registration_token' => Option::getRegistrationToken(),
+
+        ];
+
+        if ( $method === 'register' ) {
+            $request['webhook'] = Hooks::getInboundHookData();
+        }
+
         $res = (new self)
             ->setMethod($method)
-            ->request([
-                'name' => Option::getExternalUserName(),
-                'email' => Option::getExternalUserEmail(),
-                'password' => Option::getExternalUserPassword(),
-                'registration_token' => Option::getRegistrationToken(),
-                'hook' => Hooks::getInboundHookData()
-            ])
+            ->request()
             ->getResponse();
 
         if (!isset($res['status']) || $res['status'] != true) return $res;

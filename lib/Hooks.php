@@ -41,7 +41,7 @@ class Hooks
     {
         return [
             'path' => Hooks::getInboundHookPath(),
-            'user' => Hooks::getUserId(),
+            'external_user_id' => Hooks::getUserId(),
             'token' => Hooks::getInboundHookPassword()
         ];
     }
