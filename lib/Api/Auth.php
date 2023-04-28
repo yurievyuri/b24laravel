@@ -17,16 +17,14 @@ class Auth extends \Dev\Larabit\Http
             'email' => Option::getExternalUserEmail(),
             'password' => Option::getExternalUserPassword(),
             'registration_token' => Option::getRegistrationToken(),
-
         ];
 
         if ( $method === 'register' ) {
             $request['webhook'] = Hooks::getInboundHookData();
         }
-
         $res = (new self)
             ->setMethod($method)
-            ->request()
+            ->request($request)
             ->getResponse();
 
         if (!isset($res['status']) || $res['status'] != true) return $res;
