@@ -13,7 +13,7 @@ class Hooks
 {
     public static function getUserId(): int
     {
-        return Option::CONF_USER_ID;
+        return (int) Option::CONF_USER_ID;
     }
 
     public static function getExist():? int
