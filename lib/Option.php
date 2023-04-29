@@ -10,6 +10,7 @@ final class Option
     const MODULE_ID = 'dev.larabit';
     const CONF_MODULE_ID = self::MODULE_ID;
     const CONF_USER_ID = 1;
+    const CONF_EXTERNAL_USER_ID = 'external_user_id';
     const CONF_INBOUND_HOOK_ID = 'inbound_hook_id';
     const CONF_INBOUND_HOOK_PASSWORD = 'inbound_hook_password';
     const CONF_ACTIVATE = 'activate';
@@ -21,6 +22,10 @@ final class Option
     const CONF_EXTERNAL_USER_TOKEN = 'external_user_token';
     const CONF_DISABLE_SSL_VERIFICATION = 'disable_ssl_verification';
     const CONF_HTTP_PROTOCOL = 'http_protocol';
+
+    const HOOK_INBOUND = 'inbound';
+    const HOOK_OUTBOUND = 'outbound';
+    const HOOK_INTERNAL = 'internal';
 
     public static function isActive():bool
     {
@@ -49,6 +54,14 @@ final class Option
     public static function setExternalUserToken(string $value = ''): void
     {
         \Bitrix\Main\Config\Option::set(self::MODULE_ID, self::CONF_EXTERNAL_USER_TOKEN, $value);
+    }
+    public static function setExternalUserId(int $userId = null): void
+    {
+        \Bitrix\Main\Config\Option::set(self::MODULE_ID, self::CONF_EXTERNAL_USER_ID, $userId);
+    }
+    public static function getExternalUserId(): ?int
+    {
+        return (int) \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_USER_ID);
     }
     public static function isDisableSslVerification(): bool
     {

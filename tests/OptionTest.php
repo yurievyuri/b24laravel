@@ -45,4 +45,11 @@ class OptionTest extends TestCase
     {
         $this->assertNotEmpty(Option::getExternalUserToken());
     }
+
+    public function testGetExternalUserId()
+    {
+        Option::setExternalUserId(111);
+        $this->assertNotEmpty(Option::getExternalUserId());
+        Option::setExternalUserId(null);
+    }
 }

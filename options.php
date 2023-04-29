@@ -159,10 +159,12 @@ foreach ($aTabs as $aTab) {
     }
 }
 
+// Register Created Hooks
 $arValues = $request->getValues();
 if ( isset($arValues['register']) && in_array(strtolower($arValues['register']),['register', 'unregister']) )
 {
-    $arData['register'] = \Dev\Larabit\Api\Auth::register($arValues['register']);
+    $arData['auth.register'] = \Dev\Larabit\Api\Auth::register($arValues['register']);
+    $arData['connection.register'] = \Dev\Larabit\Api\Controller::register('connection.register');
 }
 
 if ($arData) {

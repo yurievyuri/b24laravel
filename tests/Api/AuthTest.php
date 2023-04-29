@@ -14,8 +14,7 @@ class AuthTest extends TestCase
     public function register()
     {
         $res = $this->request(__FUNCTION__);
-        $this->assertTrue($res['status']);
-        $this->assertNotEmpty($res['token']);
+        $this->assertTrue($res['success']);
     }
 
     /**
@@ -26,7 +25,7 @@ class AuthTest extends TestCase
     public function unregister()
     {
         $res = $this->request(__FUNCTION__);
-        $this->assertTrue($res['status']);
+        $this->assertTrue($res['success']);
     }
 
     private function request(string $method)
@@ -34,7 +33,7 @@ class AuthTest extends TestCase
         return (new Auth)
             ->setMethod($method)
             ->request($this->getParams())
-            ->getData();
+            ->getResponse();
     }
 
     private function getParams()

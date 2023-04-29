@@ -12,6 +12,7 @@ class Auth extends \Dev\Larabit\Http
 
     public static function register(string $method)
     {
+        xdebug_break();
         $method = strtolower($method);
         $request = [
             'name' => Option::getExternalUserName(),
@@ -30,6 +31,12 @@ class Auth extends \Dev\Larabit\Http
             Option::setExternalUserToken($obRes->getData('token'));
         } else {
             Option::setExternalUserToken(false);
+        }
+
+        if ( $obRes->getData('user_id') ){
+            Option::setExternalUserId((int)$obRes->getData('user_id'));
+        } else {
+            Option::setExternalUserId(null);
         }
 
         return $obRes->getResponse();

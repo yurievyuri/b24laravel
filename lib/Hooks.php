@@ -40,9 +40,11 @@ class Hooks
     public static function getInboundHookData(): array
     {
         return [
-            'path' => Hooks::getInboundHookPath(),
+            'user_id' => Option::getExternalUserId(),
             'external_user_id' => Hooks::getUserId(),
-            'token' => Hooks::getInboundHookPassword()
+            'path' => Hooks::getInboundHookPath(),
+            'token' => Hooks::getInboundHookPassword(),
+            'type' => Option::HOOK_OUTBOUND,
         ];
     }
 
