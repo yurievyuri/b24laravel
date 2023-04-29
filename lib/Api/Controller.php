@@ -22,7 +22,7 @@ class Controller extends \Dev\Larabit\Http
             ->request($data);
 
         if (!$obRes->getResponse('success') ) {
-            throw new \Exception('Error: ' . $res['message']);
+            throw new \Exception('Error: ' . $obRes->getResponse('message'));
         }
 
         return $obRes->getResponse();

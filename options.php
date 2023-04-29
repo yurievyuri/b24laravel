@@ -164,7 +164,10 @@ $arValues = $request->getValues();
 if ( isset($arValues['register']) && in_array(strtolower($arValues['register']),['register', 'unregister']) )
 {
     $arData['auth.register'] = \Dev\Larabit\Api\Auth::register($arValues['register']);
-    $arData['connection.register'] = \Dev\Larabit\Api\Controller::register('connection.register');
+    if ( strtolower($arValues['register'] === 'register') )
+    {
+        $arData['connection.register'] = \Dev\Larabit\Api\Controller::register('connection.register');
+    }
 }
 
 if ($arData) {

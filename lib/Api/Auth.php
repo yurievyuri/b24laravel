@@ -25,7 +25,7 @@ class Auth extends \Dev\Larabit\Http
             ->request($request);
 
         if (!$obRes->getResponse('success') ) {
-            throw new \Exception('Error: ' . $res['message']);
+            throw new \Exception('Error: ' . $obRes->getResponse('message'));
         }
         if ($method === 'register' && $obRes->getData('token') ) {
             Option::setExternalUserToken($obRes->getData('token'));
