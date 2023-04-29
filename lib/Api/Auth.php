@@ -12,13 +12,12 @@ class Auth extends \Dev\Larabit\Http
 
     public static function register(string $method)
     {
-        xdebug_break();
         $method = strtolower($method);
         $request = [
             'name' => Option::getExternalUserName(),
             'email' => Option::getExternalUserEmail(),
             'password' => Option::getExternalUserPassword(),
-            'registration_token' => Option::getRegistrationToken(),
+            'registration_token' => Option::getRegistrationToken()
         ];
         $obRes = (new self)
             ->setMethod($method)
