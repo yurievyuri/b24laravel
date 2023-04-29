@@ -38,12 +38,16 @@ class Http
         return $this->path . ($this->method ? '/' . $this->method : '');
     }
 
-    public function getResponse(): array
+    public function getResult()
     {
-        return $this->response ?: [];
+        return $this->response;
     }
-    public function getData()
+    public function getResponse(string $key = null)
     {
-        return $this->getResponse()['data'] ?? [];
+        return $key ? $this->response[ $key ] : $this->response;
+    }
+    public function getData( string $key = null )
+    {
+        return $key ? $this->getResponse('data')[$key] : $this->getResponse('data');
     }
 }

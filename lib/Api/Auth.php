@@ -19,24 +19,19 @@ class Auth extends \Dev\Larabit\Http
             'password' => Option::getExternalUserPassword(),
             'registration_token' => Option::getRegistrationToken(),
         ];
-        /*if ( $method === 'register' ) {
-            $request['webhook'] = Hooks::getInboundHookData();
-        }*/
-        $res = (new self)
+        $obRes = (new self)
             ->setMethod($method)
-            ->request($request)
-            ->getResponse();
+            ->request($request);
 
-        if (!isset($res['status']) || $res['status'] != true) {
+        if (!$obRes->getResponse('success') ) {
             throw new \Exception('Error: ' . $res['message']);
         }
-
-        if ($method === 'register' && !empty($res['token'])) {
-            Option::setExternalUserToken($res['token']);
+        if ($method === 'register' && $obRes->getData('token') ) {
+            Option::setExternalUserToken($obRes->getData('token'));
         } else {
             Option::setExternalUserToken(false);
         }
 
-        return $res;
+        return $obRes->getResponse();
     }
 }
