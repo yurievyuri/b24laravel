@@ -7,6 +7,8 @@ $arClasses = [
     "\\Dev\\Larabit\\Option" => "lib/Option.php",
     "\\Dev\\Larabit\\Api\\Auth" => "lib/Api/Auth.php",
     "\\Dev\\Larabit\\Api\\Laravel" => "lib/Api/Laravel.php",
+    "\\Dev\\Larabit\\Api\\Action" => "lib/Api/Action.php",
+    "\\Dev\\Larabit\\Api\\Reaction" => "lib/Api/Rection.php",
     "\\Dev\\Larabit\\Scope" => "lib/Scope.php",
     "\\Dev\\Larabit\\Hooks" => "lib/Hooks.php",
 ];
