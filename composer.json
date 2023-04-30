@@ -3,7 +3,7 @@
     "description": "Bitrix24 D7 Module for Larabit Connector",
     "version": "0.0.1",
     "type": "bitrix-module",
-    "keywords": ["bitrix", "bitrix24", "plugin"],
+    "keywords": ["bitrix", "bitrix24", "module", "laravel", "connector", "larabit"],
     "homepage": "https://github.com/yurievyuri/dev.larabit",
     "require": {
         "php": ">=7.4",

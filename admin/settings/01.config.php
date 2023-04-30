@@ -22,6 +22,14 @@ $ar = [
             Option::get($module_id, \Dev\Larabit\Option::CONF_ACTIVATE) ?: 'N',
             ['checkbox']
         ],
+
+        \Dev\Larabit\Option::CONF_USE_AGENT => [
+            \Dev\Larabit\Option::CONF_USE_AGENT,
+            Loc::getMessage('DEV_LARABIT_USE_AGENT'),
+            Option::get($module_id, \Dev\Larabit\Option::CONF_USE_AGENT) ?: 'Y',
+            ['checkbox']
+        ],
+
         \Dev\Larabit\Option::CONF_EXTERNAL_DOMAIN => [
             \Dev\Larabit\Option::CONF_EXTERNAL_DOMAIN,
             Loc::getMessage('DEV_LARABIT_EXTERNAL_DOMAIN'),

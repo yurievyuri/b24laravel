@@ -77,12 +77,12 @@ class Handlers
 
     public static function __callStatic($name, $arguments = null): void
     {
-        $obj = new static;
+        $obj = new self;
         $obj->setName($name)->setArguments($arguments);
 
         /** @var \Dev\Larabit\Api\Laravel $class */
         $class = '\\Dev\\Larabit\\Api\\' . $obj->getType();
-        (new $class($obj))->send($obj);
+        ( new $class($obj) )->send($obj);
 
         // в аргементах будут данные самого битрикс
         // из наименования обращения к несуществующему методу надо понять:

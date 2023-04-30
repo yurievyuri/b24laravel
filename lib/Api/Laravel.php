@@ -15,9 +15,9 @@ class Laravel extends \Dev\Larabit\Http
 
     public function send()
     {
-        if ( $handler->useDump() ) {
+        /*if ( $handler->useDump() ) {
 
-        }
+        }*/
         $a= 1;
     }
 

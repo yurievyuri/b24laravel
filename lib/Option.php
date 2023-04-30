@@ -14,6 +14,7 @@ final class Option
     const CONF_INBOUND_HOOK_ID = 'inbound_hook_id';
     const CONF_INBOUND_HOOK_PASSWORD = 'inbound_hook_password';
     const CONF_ACTIVATE = 'activate';
+    const CONF_USE_AGENT = 'agent';
     const CONF_EXTERNAL_DOMAIN = 'external_domain';
     const CONF_EXTERNAL_USER_NAME = 'external_user_name';
     const CONF_EXTERNAL_USER_PASSWORD = 'external_user_password';
@@ -74,6 +75,14 @@ final class Option
     public static function getRegistrationToken(): string
     {
         return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_REGISTRATION_TOKEN);
+    }
+    public static function getUseAgent(): bool
+    {
+        return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_USE_AGENT) === 'Y';
+    }
+    public static function setUseAgent(string $value = 'Y'): bool
+    {
+        return \Bitrix\Main\Config\Option::set(self::MODULE_ID, self::CONF_USE_AGENT, $value);
     }
 
     public static function getModuleId(): string
