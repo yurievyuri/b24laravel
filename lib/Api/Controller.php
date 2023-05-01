@@ -2,19 +2,18 @@
 
 namespace Dev\Larabit\Api;
 
+use Dev\Larabit\Handlers;
 use Dev\Larabit\Hooks;
+use Dev\Larabit\Http;
+use Exception;
 
-/**
- * @created on 29/04/2023 by yuriyuriev
- * updated.virtualbox
- * @soundtrack Pola & Bryson - Cold Love
- */
-class Controller extends \Dev\Larabit\Http
+class Controller extends Http
 {
-    protected $path = '/controller';
+    protected string $path = '/controller';
+    protected Handlers $handler;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function register(string $method = 'connection.register')
     {
@@ -24,10 +23,23 @@ class Controller extends \Dev\Larabit\Http
             ->request($data);
 
         if (!$obRes->getResponse('success') ) {
-            throw new \Exception('Error: ' . $obRes->getResponse('message'));
+            throw new Exception('Error: ' . $obRes->getResponse('message'));
         }
 
         return $obRes->getResponse();
     }
 
+    public function setHandler(Handlers $handler): Controller
+    {
+        $this->handler = $handler;
+        return $this;
+    }
+
+    public function send()
+    {
+        /*if ( $handler->useDump() ) {
+
+        }*/
+        $a= 1;
+    }
 }

@@ -5,14 +5,14 @@ namespace Dev\Larabit\Api;
 use Dev\Larabit\Option;
 use Exception;
 
-class Auth extends \Dev\Larabit\Http
+class Auth extends Controller
 {
     protected string $path = '/auth';
 
     /**
      * @throws Exception
      */
-    public static function register(string $method)
+    public static function register(string $method = 'register')
     {
         $method = strtolower($method);
         $request = [
@@ -37,7 +37,7 @@ class Auth extends \Dev\Larabit\Http
         if ( $obRes->getData('user_id') ){
             Option::setExternalUserId((int)$obRes->getData('user_id'));
         } else {
-            Option::setExternalUserId(null);
+            Option::setExternalUserId(0);
         }
 
         return $obRes->getResponse();

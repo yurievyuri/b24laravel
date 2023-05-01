@@ -4,6 +4,7 @@ namespace Dev\Larabit;
 
 class Http
 {
+    protected string $path = 'controller';
     protected array $response = [];
     protected string $method;
 
