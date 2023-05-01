@@ -11,7 +11,7 @@ $arClasses = [
     "\\Dev\\Larabit\\Hooks" => "lib/Hooks.php",
 
     "\\Dev\\Larabit\\Api\\Auth" => "lib/Api/Auth.php",
-    "\\Dev\\Larabit\\Api\\Laravel" => "lib/Api/Laravel.php",
+    "\\Dev\\Larabit\\Api\\Handler" => "lib/Api/Handler.php",
     "\\Dev\\Larabit\\Api\\Action" => "lib/Api/Action.php",
     "\\Dev\\Larabit\\Api\\Reaction" => "lib/Api/Reaction.php",
 ];

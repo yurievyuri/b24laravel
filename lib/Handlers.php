@@ -5,6 +5,7 @@ namespace Dev\Larabit;
 use Bitrix\Main\Loader;
 use Bitrix\Main\LoaderException;
 use Dev\Larabit\Api\Controller;
+use Dev\Larabit\Api\Handler;
 use ReflectionException;
 
 /**
@@ -111,8 +112,8 @@ class Handlers
         $obj = new self;
         $obj->setName($name)->setArguments($arguments);
 
-        /** @var Controller $class */
+        /** @var Handler $class */
         $class = '\\Dev\\Larabit\\Api\\' . $obj->getType();
-        ( new $class )->setHandler($obj)->send();
+        ( new $class )->setHandler($obj)->register();
     }
 }
