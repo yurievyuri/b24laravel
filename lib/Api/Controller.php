@@ -48,24 +48,37 @@ class Controller extends Http
     /**
      * @throws ReflectionException
      */
-    public function useDump(): bool
+    public function useDump(): ?string
     {
-        if ( !$this->getHandler()->useDump() ) return true;
+        if ( !$this->getHandler()->useDump() ) return null;
         return Dumper::make( $this->getHandler()->getName(), $this->getHandler()->getArguments() );
     }
 
-    public function useAgent(&$agentName): bool
+    public function useAgent( string $dumpKey = null ): bool
     {
         if ( !$this->getHandler()->useAgent() ) return false;
-        $name = $this->getHandler()->getName();
-        $agentName = '\\' . static::class . '::agent("'. $name .'"';
 
-        $args = $this->getHandler()->getArguments();
-        if ( isset($args['ID']) && is_numeric($args['ID']))
-        {
-            $agentName .= ', "' . $args['ID'] . '"';
+        $name = $this->getHandler()->getName();
+        $agentName = '\\' . static::class . str_repeat(PATH_SEPARATOR,2) . $name .'("';
+
+        // todo решить вопрос с объектами орм
+
+        if ( $dumpKey != null ) {
+            $agentName .= $dumpKey;
+        } else {
+            $args = is_array($this->getHandler()->getArguments())
+                ? $this->getHandler()->getArguments()[0]
+                : $this->getHandler()->getArguments()[1]
+            ;
+            if ( isset($args['ID']) && is_numeric($args['ID']))
+            {
+                $agentName .= $args['ID'];
+            }
         }
-        $agentName .= ');';
+
+
+        $agentName .= '");';
+
         return Agent::create([
             'NAME'=> $agentName,
             'IS_PERIOD' => 'Y',
@@ -80,28 +93,35 @@ class Controller extends Http
      * @throws ReflectionException
      * @throws Exception
      */
-    public function send()
+    public function send(): bool
     {
-        if ( !$this->useDump() ) {
-            throw new Exception(Loc::getMessage('DEV_LARABIT_DUMP_CREATION_ERROR'));
+        $dumpKey = $this->useDump();
+        if ( !$this->useAgent($dumpKey) ) {
+            $class = '\\' . static::class;
+            $class::{$this->getHandler()->getName()}($dumpKey, $this->getHandler()->getArguments());
         }
-
-        if ( $this->useAgent($agentName) ) return true;
-        eval($agentName);
+        return true;
     }
 
+
     /**
-     * Обработка для агента
-     * @param $name
-     * @param $arguments
+     * Processing for an agent
+     * @param string $name
+     * @param null $arguments
      * @return void
      */
-    public static function __callStatic($name, $arguments)
+    public static function __callStatic(string $name, $arguments = null)
     {
-        $args = [];
+        // search for cached data
+        $data['cached'] = Dumper::take($name, $arguments[0]);
+        $data['args'] = $arguments;
 
-        $obRes = (new static)
-            ->setMethod('handler/' . $name)
-            ->request($arguments);
+        //  todo получение дополнительных данных для отправки
+        //  необходимые условия будут храниться в файлах настройки,
+        //  обращение туда необходимо реализовать собственным классом
+
+        $obj = (new static);
+        $obj->setMethod($name)
+            ->request($data ?: $arguments);
     }
 }

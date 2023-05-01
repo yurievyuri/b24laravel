@@ -98,11 +98,11 @@ class Handlers
     public function useAgent(): bool
     {
         $option =  Option::getUseAgent();
+        if ( !$option ) return false;
         if ( $this->mode === self::ON_BEFORE && $this->type === self::REACTION ) return false;
-        if ( $option && $this->mode === self::ON_AFTER ) return true;
+        if ( $this->mode === self::ON_AFTER ) return true;
         return true;
     }
-
     /**
      * @throws ReflectionException
      */
@@ -115,5 +115,4 @@ class Handlers
         $class = '\\Dev\\Larabit\\Api\\' . $obj->getType();
         ( new $class )->setHandler($obj)->send();
     }
-
 }

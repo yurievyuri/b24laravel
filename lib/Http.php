@@ -37,8 +37,7 @@ class Http
 
     public function setMethod(string $method): Http
     {
-        $method = str_replace('.', '/', $method);
-        $this->method = strtolower($method);
+        $this->method = str_replace('.', '/', $method);
         return $this;
     }
 

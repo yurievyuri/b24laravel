@@ -95,15 +95,10 @@ class Dumper
 
         if (!$string) {
             $cache->clean($md5, $name);
-            return '';
+            return null;
         }
 
         $object = unserialize(base64_decode($string));
-        if (!$object && !is_object($object)) {
-            $cache->clean($md5, $name);
-            return '';
-        }
-
         $cache->clean($md5, $name);
 
         return $object;
