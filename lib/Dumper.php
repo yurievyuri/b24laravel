@@ -3,6 +3,8 @@
 namespace Dev\Larabit;
 
 use Bitrix\Main\Data\Cache;
+use Exception;
+use ReflectionException;
 
 class Dumper
 {
@@ -11,13 +13,14 @@ class Dumper
     private const ttl = 60 * 60 * 24 * 3;
     private const lifeTime = 60 * 60 * 24 * 5;
 
-    private $subPath = '';
+    private string $subPath = '';
 
     /**
      * @param string $name
      * @param $object
-     * @return bool
-     * @throws \ReflectionException
+     * @return string|null
+     * @throws ReflectionException
+     * @throws Exception
      */
     public static function make(string $name, $object): ?string
     {
@@ -29,26 +32,28 @@ class Dumper
         usleep(100);
         $cacheResult = $cache->get($cacheId) == $object;
 
-        if (!$cacheResult) {
+        if (!$cacheResult)
+        {
             $cache = Cache::createInstance();
             $cache->forceRewriting(true);
             $cache->startDataCache(self::ttl, $cacheId, $name);
             $cache->endDataCache($object);
             $r = new Reflect($cache);
             if ($r->getProtectedProperty('filename')) {
-                $path = __DIR__ . './../../../..' . $r->getProtectedProperty('baseDir') . $r->getProtectedProperty('initDir') . $r->getProtectedProperty('filename');
+                $path = __DIR__ . './../../../..'
+                    . $r->getProtectedProperty('baseDir')
+                    . $r->getProtectedProperty('initDir')
+                    . $r->getProtectedProperty('filename')
+                ;
             }
             $cacheResult = file_exists($path);
         }
 
-        return $cacheId ?: false;
+        return $cacheId || $cacheResult ? $cacheId : false;
     }
 
     public static function take(string $name, string $md5)
     {
-        $string = null;
-        $cache = null;
-
         $cache = new self($name);
         $string = $cache->get($md5);
 
@@ -64,7 +69,6 @@ class Dumper
             return '';
         }
 
-        /** @var Actions $object */
         $object = unserialize(base64_decode($string));
         if (!$object && !is_object($object)) {
             $cache->clean($md5, $name);
@@ -92,19 +96,18 @@ class Dumper
         return '.' . self::ext;
     }
 
-    public function setSubPath($path)
+    private function setSubPath($path): void
     {
         $this->subPath = $path;
-        return $this;
     }
 
-    public function getSubPath(): string
+    private function getSubPath(): string
     {
         return $this->subPath ? $this->subPath . DIRECTORY_SEPARATOR : '';
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function set(string $key, $data): bool
     {
@@ -112,7 +115,7 @@ class Dumper
             $data = serialize($data);
         }
         if (!$this->checkDir()) {
-            throw new \Exception('Failed to access directory ' . $this->getDir());
+            throw new Exception('Failed to access directory ' . $this->getDir());
         }
         return file_put_contents($this->getDir() . $key . $this->getExt(), $data);
     }
@@ -163,7 +166,7 @@ class Dumper
         return $results;
     }
 
-    public function scrap_remove()
+    private function scrap_remove()
     {
         //delete recursively all files older than 15 days
         $files = glob($this->getDir() . '*');

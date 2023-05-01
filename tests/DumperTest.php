@@ -7,7 +7,10 @@ use PHPUnit\Framework\TestCase;
 
 class DumperTest extends TestCase
 {
-    public function testMakeAndAgent()
+    /**
+     * @throws \ReflectionException
+     */
+    public function testMakeAndTake()
     {
         $ar = [1,2,34,4,5,6,];
         $name = rand(12314, 24598273592387);
