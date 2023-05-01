@@ -3,6 +3,7 @@
 namespace Dev\Larabit;
 
 use Bitrix\Main\Loader;
+use Dev\Larabit\Api\Laravel;
 
 class Handlers
 {
@@ -80,7 +81,7 @@ class Handlers
         $obj = new self;
         $obj->setName($name)->setArguments($arguments);
 
-        /** @var \Dev\Larabit\Api\Laravel $class */
+        /** @var Laravel $class */
         $class = '\\Dev\\Larabit\\Api\\' . $obj->getType();
         ( new $class($obj) )->send($obj);
 

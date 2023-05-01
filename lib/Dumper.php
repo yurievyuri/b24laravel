@@ -15,6 +15,12 @@ class Dumper
 
     private string $subPath = '';
 
+    public function __construct(string $subPath = '')
+    {
+        $this->subPath = $subPath;
+        $this->scrap_remove();
+    }
+
     /**
      * @param string $name
      * @param $object
@@ -80,13 +86,7 @@ class Dumper
         return $object;
     }
 
-    public function __construct(string $subPath = '')
-    {
-        $this->subPath = $subPath;
-        $this->scrap_remove();
-    }
-
-    public function getDir(): string
+    private function getDir(): string
     {
         return __DIR__ . '/./../' . self::dir . DIRECTORY_SEPARATOR . $this->getSubPath();
     }

@@ -2,12 +2,12 @@
 
 namespace Dev\Larabit;
 
-use Bitrix\Main\HttpRequest;
-use Http\Client\HttpClient;
+use Bitrix\Main\Config;
 
 final class Option
 {
-    const MODULE_ID = 'dev.larabit';
+    const NAME = 'larabit';
+    const MODULE_ID = 'dev.' . self::NAME;
     const CONF_MODULE_ID = self::MODULE_ID;
     const CONF_USER_ID = 1;
     const CONF_EXTERNAL_USER_ID = 'external_user_id';
@@ -16,6 +16,7 @@ final class Option
     const CONF_ACTIVATE = 'activate';
     const CONF_USE_AGENT = 'agent';
     const CONF_EXTERNAL_DOMAIN = 'external_domain';
+    const CONF_EXTERNAL_API_PREFIX = 'external_api_prefix';
     const CONF_EXTERNAL_USER_NAME = 'external_user_name';
     const CONF_EXTERNAL_USER_PASSWORD = 'external_user_password';
     const CONF_EXTERNAL_USER_EMAIL = 'external_user_email';
@@ -30,59 +31,63 @@ final class Option
 
     public static function isActive():bool
     {
-        return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_ACTIVATE) === 'Y';
+        return Config\Option::get(self::MODULE_ID, self::CONF_ACTIVATE) === 'Y';
     }
     public static function getExternalDomain(): string
     {
-        return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_DOMAIN);
+        return Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_DOMAIN);
+    }
+    public static function getExternalApiPrefix(): string
+    {
+        return Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_API_PREFIX) ?: self::NAME;
     }
     public static function getExternalUserName(): string
     {
-        return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_USER_NAME);
+        return Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_USER_NAME);
     }
     public static function getExternalUserPassword(): string
     {
-        return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_USER_PASSWORD);
+        return Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_USER_PASSWORD);
     }
     public static function getExternalUserEmail(): string
     {
-        return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_USER_EMAIL);
+        return Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_USER_EMAIL);
     }
     public static function getExternalUserToken(): string
     {
-        return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_USER_TOKEN);
+        return Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_USER_TOKEN);
     }
     public static function setExternalUserToken(string $value = ''): void
     {
-        \Bitrix\Main\Config\Option::set(self::MODULE_ID, self::CONF_EXTERNAL_USER_TOKEN, $value);
+        Config\Option::set(self::MODULE_ID, self::CONF_EXTERNAL_USER_TOKEN, $value);
     }
     public static function setExternalUserId(int $userId = null): void
     {
-        \Bitrix\Main\Config\Option::set(self::MODULE_ID, self::CONF_EXTERNAL_USER_ID, $userId);
+        Config\Option::set(self::MODULE_ID, self::CONF_EXTERNAL_USER_ID, $userId);
     }
     public static function getExternalUserId(): ?int
     {
-        return (int) \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_USER_ID);
+        return (int) Config\Option::get(self::MODULE_ID, self::CONF_EXTERNAL_USER_ID);
     }
     public static function isDisableSslVerification(): bool
     {
-        return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_DISABLE_SSL_VERIFICATION) === 'Y';
+        return Config\Option::get(self::MODULE_ID, self::CONF_DISABLE_SSL_VERIFICATION) === 'Y';
     }
     public static function getHttpProtocol(): string
     {
-        return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_HTTP_PROTOCOL) ?: 'http';
+        return Config\Option::get(self::MODULE_ID, self::CONF_HTTP_PROTOCOL) ?: 'http';
     }
     public static function getRegistrationToken(): string
     {
-        return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_REGISTRATION_TOKEN);
+        return Config\Option::get(self::MODULE_ID, self::CONF_REGISTRATION_TOKEN);
     }
     public static function getUseAgent(): bool
     {
-        return \Bitrix\Main\Config\Option::get(self::MODULE_ID, self::CONF_USE_AGENT) === 'Y';
+        return Config\Option::get(self::MODULE_ID, self::CONF_USE_AGENT) === 'Y';
     }
-    public static function setUseAgent(string $value = 'Y'): bool
+    public static function setUseAgent(string $value = 'Y'): void
     {
-        return \Bitrix\Main\Config\Option::set(self::MODULE_ID, self::CONF_USE_AGENT, $value);
+        Config\Option::set(self::MODULE_ID, self::CONF_USE_AGENT, $value);
     }
 
     public static function getModuleId(): string
@@ -93,7 +98,7 @@ final class Option
     {
         return '1.0.0';
     }
-    public static function getDateRealease(): string
+    public static function getDateRelease(): string
     {
         return '2023-04-27';
     }

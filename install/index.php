@@ -19,7 +19,7 @@ class dev_larabit extends CModule
         $this->getModuleClasses();
 
         $this->MODULE_VERSION = \Dev\Larabit\Option::getVersion();
-        $this->MODULE_VERSION_DATE = \Dev\Larabit\Option::getDateRealease();
+        $this->MODULE_VERSION_DATE = \Dev\Larabit\Option::getDateRelease();
         $this->MODULE_ID = \Dev\Larabit\Option::getModuleId();
         $this->MODULE_NAME = Loc::getMessage('DEV_LARABIT_MODULE_NAME');
         $this->MODULE_DESCRIPTION = Loc::getMessage('DEV_LARABIT_MODULE_DESCRIPTION');

@@ -6,7 +6,7 @@ use Dev\Larabit\Handlers;
 
 class Laravel extends \Dev\Larabit\Http
 {
-    protected $path = '/api/controller/bitrix';
+    protected $path = '/controller/bitrix';
 
     public function __construct( Handlers $handler )
     {

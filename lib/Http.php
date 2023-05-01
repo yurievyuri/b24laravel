@@ -7,11 +7,11 @@ class Http
     protected array $response = [];
     protected string $method;
 
-    public function request(array $params = [], array $headers = [])
+    public function request(array $params = [], array $headers = []): Http
     {
         $ob = (new \Bitrix\Main\Web\HttpClient)
             ->waitResponse(true)
-            ->setTimeout(5);
+            ->setTimeout(10);
 
         if (Option::isDisableSslVerification()) {
             $ob->disableSslVerification();
@@ -27,7 +27,7 @@ class Http
         return $this;
     }
 
-    public function setMethod(string $method)
+    public function setMethod(string $method): Http
     {
         $method = str_replace('.', '/', $method);
         $this->method = strtolower($method);
@@ -36,10 +36,11 @@ class Http
 
     public function getMethod(): string
     {
-        return $this->path . ($this->method ? '/' . $this->method : '');
+        return DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR
+            . Option::getExternalApiPrefix() . $this->path . ($this->method ? DIRECTORY_SEPARATOR . $this->method : '');
     }
 
-    public function getResult()
+    public function getResult():? array
     {
         return $this->response;
     }

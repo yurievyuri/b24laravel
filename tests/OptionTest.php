@@ -56,4 +56,9 @@ class OptionTest extends TestCase
     {
         $this->assertNotEmpty(Option::getUseAgent());
     }
+
+    public function testGetExternalApiPrefix()
+    {
+        $this->assertNotEmpty(Option::getExternalApiPrefix());
+    }
 }

@@ -3,7 +3,6 @@
 namespace Dev\Larabit\Api;
 
 use Dev\Larabit\Hooks;
-use Dev\Larabit\Option;
 
 /**
  * @created on 29/04/2023 by yuriyuriev
@@ -12,9 +11,12 @@ use Dev\Larabit\Option;
  */
 class Controller extends \Dev\Larabit\Http
 {
-    protected $path = '/api/controller';
+    protected $path = '/controller';
 
-    public static function register( string $method = 'connection.register')
+    /**
+     * @throws \Exception
+     */
+    public static function register(string $method = 'connection.register')
     {
         $data = Hooks::getInboundHookData();
         $obRes = (new self)

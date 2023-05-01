@@ -2,14 +2,16 @@
 
 namespace Dev\Larabit\Api;
 
-use Dev\Larabit\Hooks;
 use Dev\Larabit\Option;
-use function PHPUnit\Framework\throwException;
+use Exception;
 
 class Auth extends \Dev\Larabit\Http
 {
-    protected $path = '/api/auth';
+    protected string $path = '/auth';
 
+    /**
+     * @throws Exception
+     */
     public static function register(string $method)
     {
         $method = strtolower($method);
@@ -24,7 +26,7 @@ class Auth extends \Dev\Larabit\Http
             ->request($request);
 
         if (!$obRes->getResponse('success') ) {
-            throw new \Exception('Error: ' . $obRes->getResponse('message'));
+            throw new Exception('Error: ' . $obRes->getResponse('message'));
         }
         if ($method === 'register' && $obRes->getData('token') ) {
             Option::setExternalUserToken($obRes->getData('token'));
