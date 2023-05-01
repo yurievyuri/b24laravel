@@ -8,5 +8,6 @@ namespace Dev\Larabit\Api;
  */
 class Action extends Controller
 {
+    protected string $path = '/controller/handler';
 
 }

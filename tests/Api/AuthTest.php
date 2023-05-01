@@ -2,7 +2,6 @@
 
 namespace Dev\Larabit\Api;
 
-use Dev\Larabit\Option;
 use PHPUnit\Framework\TestCase;
 
 class AuthTest extends TestCase
@@ -36,7 +35,7 @@ class AuthTest extends TestCase
             ->getResponse();
     }
 
-    private function getParams()
+    private function getParams(): array
     {
         return [
             'name' => 'testGen',

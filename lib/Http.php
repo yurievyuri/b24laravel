@@ -2,6 +2,8 @@
 
 namespace Dev\Larabit;
 
+use Bitrix\Main\Web\HttpClient;
+
 class Http
 {
     protected string $path = 'controller';
@@ -10,7 +12,7 @@ class Http
 
     public function request(array $params = [], array $headers = []): Http
     {
-        $ob = (new \Bitrix\Main\Web\HttpClient)
+        $ob = (new HttpClient)
             ->waitResponse(true)
             ->setTimeout(10);
 
@@ -28,6 +30,11 @@ class Http
         return $this;
     }
 
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
     public function setMethod(string $method): Http
     {
         $method = str_replace('.', '/', $method);
@@ -38,7 +45,9 @@ class Http
     public function getMethod(): string
     {
         return DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR
-            . Option::getExternalApiPrefix() . $this->path . ($this->method ? DIRECTORY_SEPARATOR . $this->method : '');
+            . Option::getExternalApiPrefix()
+            . $this->getPath()
+            . ($this->method ? DIRECTORY_SEPARATOR . $this->method : '');
     }
 
     public function getResult():? array

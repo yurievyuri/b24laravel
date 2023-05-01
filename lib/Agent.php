@@ -2,11 +2,12 @@
 
 namespace Dev\Larabit;
 
-use Bitrix\Main\ArgumentException;
-use Bitrix\Main\ObjectPropertyException;
-use Bitrix\Main\SystemException;
 use Bitrix\Main\Type\DateTime;
-use Bitrix\Main\UserTable;
+use CAgent;
+use CAllAgent;
+use CSite;
+use Exception;
+use Throwable;
 
 class Agent
 {
@@ -16,7 +17,6 @@ class Agent
      * Update agents with removal
      *
      * @return bool|mixed
-     * @throws Exception
      */
     public static function create(array $pref = [], bool $delete = false)
     {
@@ -24,7 +24,7 @@ class Agent
         if (!$pref) return false;
         if (!$pref['NAME']) return false;
         if (!isset($pref['MODULE_ID'])) {
-            $pref['MODULE_ID'] = \Dev\Larabit\Handlers::MODULE_ID;
+            $pref['MODULE_ID'] = Option::MODULE_ID;
         }
         if ($pref['PERIOD'] && !isset($pref['IS_PERIOD'])) {
             $pref['IS_PERIOD'] = $pref['PERIOD'];
@@ -93,19 +93,20 @@ class Agent
         return CAgent::GetById($agentId)->Fetch()['NEXT_EXEC'];
     }
 
+
     /**
      * @throws Exception
      */
-    private static function updateAgentDateNextExecDirect($id, $date): bool
+    private static function updateAgentDateNextExecDirect($id, $date): void
     {
         global $DB;
-        $date = (new \DateTime($date, new DateTimeZone()))->format('Y-m-d H:i:s');
+        $date = (new DateTime($date))->format('Y-m-d H:i:s');
         $strUpdate = "`NEXT_EXEC` = '" . $date . "'";
         $strSql = 'UPDATE b_agent SET ' . $strUpdate . ' WHERE ID=' . $id;
         $DB->Query($strSql, false, 'FILE: ' . __FILE__ . '<br> LINE: ' . __LINE__);
-        $bdDate = self::getAgentDateNextExec($id);
-        if (strtotime((string) $bdDate) === strtotime($date)) return true;
-        return false;
+        //$bdDate = self::getAgentDateNextExec($id);
+        /*if (strtotime((string) $bdDate) === strtotime($date)) {
+        }*/
     }
 
     private static function isExist($name = null): int
@@ -114,7 +115,7 @@ class Agent
         return (int) CAllAgent::GetList([], ['=NAME' => $name])->Fetch()['ID'] ?: 0;
     }
 
-    private static function defaultDateTimeFormat(): string
+    public static function defaultDateTimeFormat(): string
     {
         global $DB;
         return $DB->DateFormatToPHP(CSite::GetDateFormat());

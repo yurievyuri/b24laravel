@@ -3,7 +3,6 @@
 namespace Dev\Larabit\Api;
 
 use Dev\Larabit\Hooks;
-use Dev\Larabit\Option;
 use PHPUnit\Framework\TestCase;
 
 class ControllerTest extends TestCase
@@ -18,7 +17,7 @@ class ControllerTest extends TestCase
         $this->assertTrue($res['success']);
     }
 
-    private function request(string $method)
+    private function request(string $method = '')
     {
         return (new Controller)
             ->setMethod($method)

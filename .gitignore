@@ -1,0 +1,12 @@
+node_modules
+vendor/
+composer.lock
+*.log
+*.dump
+.DS_Store
+Thumbs.db
+.idea/workspace.xml
+cache/*.*
+*.cache
+*.csv
+*.dumped

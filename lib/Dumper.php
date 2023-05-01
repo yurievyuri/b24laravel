@@ -3,22 +3,47 @@
 namespace Dev\Larabit;
 
 use Bitrix\Main\Data\Cache;
+use Bitrix\Main\Localization\Loc;
 use Exception;
 use ReflectionException;
+\Bitrix\Main\Localization\Loc::loadMessages(__FILE__);
 
 class Dumper
 {
+    const TYPE_CONFIG = 'config';
+    const TYPE_DUMPED = 'dumped';
+    private const AllowedTypes = [
+        self::TYPE_CONFIG,
+        self::TYPE_DUMPED
+    ];
     private const ext = 'dump';
-    private const dir = 'dumped';
     private const ttl = 60 * 60 * 24 * 3;
     private const lifeTime = 60 * 60 * 24 * 5;
 
     private string $subPath = '';
+    private string $type = self::TYPE_DUMPED;
 
     public function __construct(string $subPath = '')
     {
         $this->subPath = $subPath;
-        $this->scrap_remove();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function setType(string $type = self::TYPE_DUMPED): Dumper
+    {
+        if ( !in_array($type, self::AllowedTypes) )
+        {
+            throw new Exception(Loc::getMessage('DEV_LARABIT_DUMPER_TYPE_FAULT') . implode(', ', self::AllowedTypes));
+        }
+        $this->type = $type;
+        return $this;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
     }
 
     /**
@@ -38,8 +63,7 @@ class Dumper
         usleep(100);
         $cacheResult = $cache->get($cacheId) == $object;
 
-        if (!$cacheResult)
-        {
+        if (!$cacheResult) {
             $cache = Cache::createInstance();
             $cache->forceRewriting(true);
             $cache->startDataCache(self::ttl, $cacheId, $name);
@@ -49,8 +73,7 @@ class Dumper
                 $path = __DIR__ . './../../../..'
                     . $r->getProtectedProperty('baseDir')
                     . $r->getProtectedProperty('initDir')
-                    . $r->getProtectedProperty('filename')
-                ;
+                    . $r->getProtectedProperty('filename');
             }
             $cacheResult = file_exists($path);
         }
@@ -88,7 +111,7 @@ class Dumper
 
     private function getDir(): string
     {
-        return __DIR__ . '/./../' . self::dir . DIRECTORY_SEPARATOR . $this->getSubPath();
+        return __DIR__ . '/./../' . $this->getType() . DIRECTORY_SEPARATOR . $this->getSubPath();
     }
 
     private function getExt(): string
@@ -134,6 +157,7 @@ class Dumper
         if (self::getDirContents($this->getDir())) {
             rmdir($this->getDir());
         }
+        $this->scrap_remove();
         return true;
     }
 
@@ -166,11 +190,11 @@ class Dumper
         return $results;
     }
 
-    private function scrap_remove()
+    private function scrap_remove(): void
     {
-        //delete recursively all files older than 15 days
+        if ( $this->getType() === self::TYPE_CONFIG ) return;
         $files = glob($this->getDir() . '*');
-        foreach ($files as $file) { // iterate files
+        foreach ($files as $file) {
             if (is_file($file) && time() - filemtime($file) >= self::lifeTime) {
                 unlink($file);
             }
